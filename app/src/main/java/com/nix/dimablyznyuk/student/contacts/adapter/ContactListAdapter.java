@@ -21,6 +21,9 @@ import com.nix.dimablyznyuk.student.contacts.model.Contact;
 import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.Bind;
+import butterknife.ButterKnife;
+
 /**
  * Created by Dima Blyznyuk on 07.07.15.
  */
