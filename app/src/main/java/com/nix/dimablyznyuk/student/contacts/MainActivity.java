@@ -137,7 +137,7 @@ public class MainActivity extends AppCompatActivity {
 
             case R.id.btnCancel:
                 contactsAdapter.clearCheckedContacts();
-                btnCancel.setVisibility(View.INVISIBLE);
+                btnCancel.setVisibility(View.GONE);
                 contactsAdapter.setVisibleCheckBox(false);
                 contactsAdapter.notifyDataSetChanged();
                 break;
@@ -223,6 +223,7 @@ public class MainActivity extends AppCompatActivity {
         builder.setTitle(R.string.import_contacts_from);
         builder.setPositiveButton(R.string.internal, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
+                        manager.removeAllContacts();
                         manager.addContacts(new ContactXMLSerializer(MainActivity.this)
                                 .loadContacts(ContactXMLSerializer.INTERNAL));
                         updateListView();
