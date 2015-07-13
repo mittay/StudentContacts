@@ -1,0 +1,23 @@
+<resources>
+    <string name="app_name">Contacts</string>
+    <string name="add_contact">Add contact</string>
+    <string name="edit_contact">Edit contact</string>
+    <string name="gender">Gender:</string>
+    <string name="phone_number">Phone number:</string>
+    <string name="address">Address:</string>
+    <string name="name">Name:</string>
+    <string name="new_contact">New contact</string>
+    <string name="contact_details">Contact details</string>
+    <string name="create_new_contact">Create new contact</string>
+    <string name="contact_added">Contact added!</string>
+    <string name="please_fill_all_fields">Please, fill all fields!</string>
+    <string name="delete">Delete</string>
+    <string name="save">Save</string>
+    <string name="cancel">Cancel</string>
+    <string name="nothing_to_delete">Nothing to delete!</string>
+    <string-array name="gender_array">
+        <item>Male</item>
+        <item>Female</item>
+    </string-array>
+
+</resources>
