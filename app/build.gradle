@@ -5,7 +5,7 @@ android {
     buildToolsVersion "22.0.1"
 
     defaultConfig {
-        applicationId "com.nix.dima_blyznyuk.student.contacts"
+        applicationId "com.nix.dimablyznyuk.student.contacts"
         minSdkVersion 8
         targetSdkVersion 21
         versionCode 1
