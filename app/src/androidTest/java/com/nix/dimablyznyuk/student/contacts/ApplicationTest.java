@@ -1,4 +1,4 @@
-package com.nix.dima_blyznyuk.student.contacts;
+package com.nix.dimablyznyuk.student.contacts;
 
 import android.app.Application;
 import android.test.ApplicationTestCase;
