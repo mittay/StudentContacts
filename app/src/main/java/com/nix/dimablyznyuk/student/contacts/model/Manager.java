@@ -1,17 +1,37 @@
 package com.nix.dimablyznyuk.student.contacts.model;
 
 import java.util.List;
-import java.util.UUID;
 
 /**
  * Created by Dima Blyznyuk on 08.07.15.
  */
-public interface Manager<E> {
+public interface Manager {
 
-    public abstract boolean addContact(Contact contact);
-    public abstract List<Contact> getContacts();
-    public abstract void deleteContact(Contact c);
-    public abstract Contact getContact(UUID id);
+    int createContact(String name, String address, String phone, String gender);
+
+    Contact getContact(int id);
+
+    void updateContact(Contact contact);
+
+    List<Contact> getContacts();
+
+    void removeContact(Contact c);
+
+    List<Contact> getContactsFemale();
+
+    List<Contact> getContactsMale();
+
+    void removeContacts(List<Contact> list);
+
+    void removeAllContacts();
+
+    boolean isContactExist(Contact c);
+
+    void open();
+
+    void close();
+
+    void addContacts(List<Contact> list);
 
 
 }
