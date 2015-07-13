@@ -14,6 +14,9 @@ import com.nix.dimablyznyuk.student.contacts.model.Contact;
 import com.nix.dimablyznyuk.student.contacts.model.Manager;
 import com.nix.dimablyznyuk.student.contacts.model.SQLiteContactManager;
 
+import butterknife.Bind;
+import butterknife.ButterKnife;
+
 /**
  * Created by Dima Blyznyuk on 07.07.15.
  */
@@ -21,11 +24,16 @@ public class ContactEditAddActivity extends AppCompatActivity {
 
     public static final String EXTRA_CONTACT_ID = "com.nix.dimablyznyuk.student.contacts.id";
 
-    private EditText edtName;
-    private EditText edtAddress;
-    private EditText edtPhoneNumber;
-    private Button btnAddEdit;
-    private Spinner spGender;
+    @Bind(R.id.edtEditName)
+    EditText edtName;
+    @Bind(R.id.edtEditAddress)
+    EditText edtAddress;
+    @Bind(R.id.edtEditPhoneNumber)
+    EditText edtPhoneNumber;
+    @Bind(R.id.btnAddEditContact)
+    Button btnAddEdit;
+    @Bind(R.id.spEditGender)
+    Spinner spGender;
 
     private Contact contact;
     private ArrayAdapter<CharSequence> spinnerAdapter;
@@ -35,16 +43,17 @@ public class ContactEditAddActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edite_contact);
+        ButterKnife.bind(this);
 
 //        manager = ContactManager.getInstance();
         manager = new SQLiteContactManager(this);
         manager.open();
 
-        btnAddEdit = (Button) findViewById(R.id.btnAddEditContact);
-        edtName = (EditText) findViewById(R.id.edtEditName);
-        edtAddress = (EditText) findViewById(R.id.edtEditAddress);
-        edtPhoneNumber = (EditText) findViewById(R.id.edtEditPhoneNumber);
-        spGender = (Spinner) findViewById(R.id.spEditGender);
+//        btnAddEdit = (Button) findViewById(R.id.btnAddEditContact);
+//        edtName = (EditText) findViewById(R.id.edtEditName);
+//        edtAddress = (EditText) findViewById(R.id.edtEditAddress);
+//        edtPhoneNumber = (EditText) findViewById(R.id.edtEditPhoneNumber);
+//        spGender = (Spinner) findViewById(R.id.spEditGender);
 
         Intent intent = getIntent();
 

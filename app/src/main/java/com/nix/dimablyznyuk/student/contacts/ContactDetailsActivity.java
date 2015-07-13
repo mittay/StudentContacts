@@ -8,15 +8,23 @@ import com.nix.dimablyznyuk.student.contacts.model.Contact;
 import com.nix.dimablyznyuk.student.contacts.model.Manager;
 import com.nix.dimablyznyuk.student.contacts.model.SQLiteContactManager;
 
+import butterknife.Bind;
+import butterknife.ButterKnife;
+
 /**
  * Created by Dima Blyznyuk on 06.07.15.
  */
 public class ContactDetailsActivity extends AppCompatActivity {
 
-    private TextView tvShowName;
-    private TextView tvShowAddress;
-    private TextView tvShowPhoneNumber;
-    private TextView tvShowGender;
+    @Bind(R.id.tvShowName)
+    TextView tvShowName;
+    @Bind(R.id.tvShowAddress)
+    TextView tvShowAddress;
+    @Bind(R.id.tvShowPhoneNumber)
+    TextView tvShowPhoneNumber;
+    @Bind(R.id.tvShowGender)
+    TextView tvShowGender;
+
     private Contact contact;
     private Manager manager;
 
@@ -24,6 +32,7 @@ public class ContactDetailsActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_contact);
+        ButterKnife.bind(this);
 
 //        manager = ContactManager.getInstance();
         manager = new SQLiteContactManager(this);
@@ -34,10 +43,10 @@ public class ContactDetailsActivity extends AppCompatActivity {
                 .EXTRA_CONTACT_ID);
         contact = manager.getContact(contactId);
 
-        tvShowName = (TextView) findViewById(R.id.tvShowName);
-        tvShowAddress = (TextView) findViewById(R.id.tvShowAddress);
-        tvShowPhoneNumber = (TextView) findViewById(R.id.tvShowPhoneNumber);
-        tvShowGender = (TextView) findViewById(R.id.tvShowGender);
+//        tvShowName = (TextView) findViewById(R.id.tvShowName);
+//        tvShowAddress = (TextView) findViewById(R.id.tvShowAddress);
+//        tvShowPhoneNumber = (TextView) findViewById(R.id.tvShowPhoneNumber);
+//        tvShowGender = (TextView) findViewById(R.id.tvShowGender);
 
         tvShowName.setText(contact.getName());
         tvShowAddress.setText(contact.getAddress());

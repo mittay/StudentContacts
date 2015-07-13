@@ -5,6 +5,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.Environment;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -15,6 +16,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.nix.dimablyznyuk.student.contacts.adapter.ContactListAdapter;
 import com.nix.dimablyznyuk.student.contacts.model.Contact;
@@ -22,6 +24,9 @@ import com.nix.dimablyznyuk.student.contacts.model.Manager;
 import com.nix.dimablyznyuk.student.contacts.model.SQLiteContactManager;
 
 import java.util.List;
+
+import butterknife.Bind;
+import butterknife.ButterKnife;
 
 /**
  * Created by Dima Blyznyuk on 06.07.15.
@@ -38,8 +43,12 @@ public class MainActivity extends AppCompatActivity {
 
     public static final String MALE = "Male";
     public static final String FEMALE = "Female";
-    private ListView lvContacts;
-    private Button btnCancel;
+
+    @Bind(R.id.list_view)
+    ListView lvContacts;
+    @Bind(R.id.btnCancel)
+    Button btnCancel;
+
     private ContactListAdapter contactsAdapter;
     private SharedPreferences sherdPref;
     private Manager manager;
@@ -49,11 +58,12 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        ButterKnife.bind(this);
 
         sherdPref = PreferenceManager.getDefaultSharedPreferences(this);
 
-        lvContacts = (ListView) findViewById(R.id.list_view);
-        btnCancel = (Button) findViewById(R.id.btnCancel);
+//        lvContacts = (ListView) findViewById(R.id.list_view);
+//        btnCancel = (Button) findViewById(R.id.btnCancel);
 
         btnCancel.setVisibility(View.GONE);
 
@@ -207,9 +217,15 @@ public class MainActivity extends AppCompatActivity {
 
         builder.setNegativeButton(R.string.external, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                        new ContactXMLSerializer(MainActivity.this)
-                                .writeContacts(manager.getContacts(), ContactXMLSerializer.EXTERNAL);
-
+                        if (isExternalStorageWritable()) {
+                            new ContactXMLSerializer(MainActivity.this)
+                                    .writeContacts(manager.getContacts(),
+                                            ContactXMLSerializer.EXTERNAL);
+                        } else {
+                            Toast.makeText(MainActivity.this,
+                                    getString(R.string.no_external_storage_available)
+                                    ,Toast.LENGTH_LONG).show();
+                        }
                     }
                 }
         );
@@ -234,14 +250,39 @@ public class MainActivity extends AppCompatActivity {
 
         builder.setNegativeButton(R.string.external, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                        manager.removeAllContacts();
-                        manager.addContacts(new ContactXMLSerializer(MainActivity.this)
-                                .loadContacts(ContactXMLSerializer.EXTERNAL));
-                        updateListView();
+                        if (isExternalStorageReadable()) {
+                            manager.removeAllContacts();
+                            manager.addContacts(new ContactXMLSerializer(MainActivity.this)
+                                    .loadContacts(ContactXMLSerializer.EXTERNAL));
+                            updateListView();
+                        } else {
+                            Toast.makeText(MainActivity.this,
+                                    getString(R.string.no_external_storage_available)
+                                    ,Toast.LENGTH_LONG).show();
+                        }
                     }
                 }
         );
         AlertDialog dialog = builder.create();
         builder.show();
+    }
+
+    /* Checks if external storage is available for read and write */
+    public boolean isExternalStorageWritable() {
+        String state = Environment.getExternalStorageState();
+        if (Environment.MEDIA_MOUNTED.equals(state)) {
+            return true;
+        }
+        return false;
+    }
+
+    /* Checks if external storage is available to at least read */
+    public boolean isExternalStorageReadable() {
+        String state = Environment.getExternalStorageState();
+        if (Environment.MEDIA_MOUNTED.equals(state) ||
+                Environment.MEDIA_MOUNTED_READ_ONLY.equals(state)) {
+            return true;
+        }
+        return false;
     }
 }
