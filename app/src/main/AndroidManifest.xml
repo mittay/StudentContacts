@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.nix.dima_blyznyuk.student.contacts" >
+    package="com.nix.dimablyznyuk.student.contacts" >
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
     <application
         android:allowBackup="true"
@@ -22,12 +24,12 @@
             android:label="@string/contact_details" >
         </activity>
         <activity
-            android:name=".NewContactActivity"
-            android:label="@string/create_new_contact" >
+            android:name=".ContactEditAddActivity"
+            android:label="@string/edit_contact" >
         </activity>
         <activity
-            android:name=".ContactEditActivity"
-            android:label="@string/edit_contact" >
+            android:name=".PrefActivity"
+            android:label="@string/pref" >
         </activity>
     </application>
 
