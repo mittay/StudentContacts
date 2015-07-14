@@ -101,9 +101,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/save"
-            android:id="@+id/btnSaveContact"
-            android:onClick="onClickButtonSaveContact"
+            android:id="@+id/btnAddEditContact"
+            android:onClick="onClick"
             android:layout_column="1"
-            android:layout_span="2" />
+            android:layout_span="2"
+            android:gravity="center" />
     </TableRow>
 </TableLayout>

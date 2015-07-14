@@ -1,4 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
-<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    android:key="first_preferencescreen">
+    <!--<ListPreference-->
+        <!--android:title="@string/select_how_to_show_gender"-->
+        <!--android:key="gender_priority"-->
+        <!--android:defaultValue="1"-->
+        <!--android:entries="@array/pref_list_array"-->
+        <!--android:entryValues="@array/pref_list_values" />-->
+    <ListPreference
+        android:title="@string/gender_filter"
+        android:key="gender_filter"
+        android:defaultValue="1"
+        android:entries="@array/gender_filter_array"
+        android:entryValues="@array/gender_filter_values" />
+    <ListPreference
+        android:title="@string/button_style"
+        android:key="button_style"
+        android:defaultValue="1"
+        android:entries="@array/style_array"
+        android:entryValues="@array/style_values" />
+    <ListPreference
+        android:title="@string/select_male_text_color"
+        android:key="male_color"
+        android:entries="@array/pref_colors_array"
+        android:entryValues="@array/pref_colors_values" />
+    <ListPreference
+        android:title="@string/select_female_text_color"
+        android:key="female_color"
+        android:entries="@array/pref_colors_array"
+        android:entryValues="@array/pref_colors_values" />
 
 </PreferenceScreen>

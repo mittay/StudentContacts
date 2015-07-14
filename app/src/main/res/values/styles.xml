@@ -5,4 +5,27 @@
         <!-- Customize your theme here. -->
     </style>
 
+    <style name="LigthButtonTheme" parent="Theme.AppCompat.Light">
+        <item name="android:buttonStyle">@style/ButtonLigth</item>
+        <item name="buttonStyle">@style/ButtonLigth</item>
+    </style>
+    <style name="ButtonLigth" parent="@android:style/Widget.Button">
+        <item name="android:background">@drawable/button_ligth</item>
+        <item name="android:textColor">@color/Dark</item>
+        <item name="android:textSize">18dp</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+
+    <style name="GreyButtonTheme" parent="Theme.AppCompat.Light">
+        <item name="android:buttonStyle">@style/ButtonGrey</item>
+        <item name="buttonStyle">@style/ButtonGrey</item>
+    </style>
+    <style name="ButtonGrey" parent="@android:style/Widget.Button">
+        <item name="android:background">@drawable/button_grey</item>
+        <item name="android:textColor">@color/White</item>
+        <item name="android:textSize">18dp</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
 </resources>

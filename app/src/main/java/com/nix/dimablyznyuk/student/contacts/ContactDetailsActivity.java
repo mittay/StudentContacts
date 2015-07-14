@@ -30,6 +30,9 @@ public class ContactDetailsActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
+        ThemeUtils.onActivityCreateSetTheme(this);
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_contact);
         ButterKnife.bind(this);

@@ -36,6 +36,7 @@ public class MainActivity extends AppCompatActivity {
 
     public static final int REQUEST_EDIT = 1;
     public static final int REQUEST_CREATE = 2;
+    public static final int REQUEST_PREF = 3;
 
     public static final String EXTRA_ID = "id";
 
@@ -50,30 +51,31 @@ public class MainActivity extends AppCompatActivity {
     Button btnCancel;
 
     private ContactListAdapter contactsAdapter;
-    private SharedPreferences sherdPref;
     private Manager manager;
+    private SharedPreferences prefs;
+    private SharedPreferences.OnSharedPreferenceChangeListener listener;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
+        ThemeUtils.onActivityCreateSetTheme(this);
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        Log.d(TAG, "Main.onCreate()");
+
         ButterKnife.bind(this);
 
-        sherdPref = PreferenceManager.getDefaultSharedPreferences(this);
-
-//        lvContacts = (ListView) findViewById(R.id.list_view);
-//        btnCancel = (Button) findViewById(R.id.btnCancel);
+        prefs = PreferenceManager.getDefaultSharedPreferences(this);
 
         btnCancel.setVisibility(View.GONE);
-
-//        manager = ContactManager.getInstance();
 
         manager = new SQLiteContactManager(this);
         manager.open();
 
-        contactsAdapter = new ContactListAdapter(this, manager.getContacts());
-        lvContacts.setAdapter(contactsAdapter);
+        updateListView();
 
         lvContacts.setTextFilterEnabled(true);
 
@@ -83,38 +85,53 @@ public class MainActivity extends AppCompatActivity {
                 Contact contact = (Contact) parent.getItemAtPosition(position);
                 Intent intent = new Intent(MainActivity.this, ContactEditAddActivity.class);
                 intent.putExtra(ContactEditAddActivity.EXTRA_CONTACT_ID, contact.getId());
-                startActivity(intent);
+                startActivityForResult(intent, REQUEST_EDIT);
                 return true;
             }
         });
         lvContacts.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View view,
                                     int position, long id) {
-                Log.i(TAG, "Count = " + parent.getCount() + "Adapter count = " + parent.getAdapter().getCount());
                 Contact contact = (Contact) parent.getItemAtPosition(position);
                 Intent intent = new Intent(MainActivity.this, ContactDetailsActivity.class);
                 intent.putExtra(ContactEditAddActivity.EXTRA_CONTACT_ID, contact.getId());
                 startActivityForResult(intent, REQUEST_EDIT);
             }
         });
+        listener =
+                new SharedPreferences.OnSharedPreferenceChangeListener() {
+            public void onSharedPreferenceChanged(SharedPreferences prefs, String key) {
+                if (key.equals(PrefActivity.PREF_KEY_BUTTON_THEME)) {
+                    updateButtonStyle();
+                }
+                if (key.equals(PrefActivity.PREF_KEY_GENDER_FILTER)) {
+                    manager.open();
+                    updateListView();
+                }
+                if (key.equals(PrefActivity.PREF_KEY_FEMALE_COLOR)
+                        || key.equals(PrefActivity.PREF_KEY_MALE_COLOR)) {
+                    manager.open();
+                    updateListView();
+                }
+            }
+        };
+        prefs.registerOnSharedPreferenceChangeListener(listener);
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        Log.d(TAG, "Main.onResume()");
         manager.open();
-        updateListView();
     }
 
     public void updateListView() {
         Log.d(TAG, "Main.updateListView()");
-        if (sherdPref.getString(PrefActivity.PREF_KEY_GENDER_FILTER,
+        if (prefs.getString(PrefActivity.PREF_KEY_GENDER_FILTER,
                 PrefActivity.DEFAULT_GENDER_FILTER)
                 .equals(PrefActivity.VALUE_GENDER_MALE)) {
             contactsAdapter = new ContactListAdapter(this, manager.getContactsMale());
             lvContacts.setAdapter(contactsAdapter);
-        } else if (sherdPref.getString(PrefActivity.PREF_KEY_GENDER_FILTER,
+        } else if (prefs.getString(PrefActivity.PREF_KEY_GENDER_FILTER,
                 PrefActivity.DEFAULT_GENDER_FILTER).equals(PrefActivity.VALUE_GENDER_FEMALE)) {
             contactsAdapter = new ContactListAdapter(this, manager.getContactsFemale());
             lvContacts.setAdapter(contactsAdapter);
@@ -123,11 +140,27 @@ public class MainActivity extends AppCompatActivity {
             lvContacts.setAdapter(contactsAdapter);
         }
     }
+    public void updateButtonStyle() {
+        Log.d(TAG, "Main.updateButtonStyle()");
+        if (prefs.getString(PrefActivity.PREF_KEY_BUTTON_THEME,
+                PrefActivity.VALUE_BUTTON_STANDART)
+                .equals(PrefActivity.VALUE_BUTTON_LIGTH)) {
+            Log.d(TAG, "Main.ThemeUtils.THEME_LIGTH");
+            ThemeUtils.changeToTheme(this, ThemeUtils.THEME_LIGTH);
+
+        } else if (prefs.getString(PrefActivity.PREF_KEY_BUTTON_THEME,
+                PrefActivity.VALUE_BUTTON_STANDART)
+                .equals(PrefActivity.VALUE_BUTTON_DARK)) {
+            Log.d(TAG, "Main.ThemeUtils.THEME_DARK");
+            ThemeUtils.changeToTheme(this, ThemeUtils.THEME_DARK);
+        }
+    }
 
     public void onClick(View v) {
 
         switch (v.getId()) {
             case R.id.btnNewContact:
+
                 startActivityForResult(new Intent(this, ContactEditAddActivity.class),
                         REQUEST_CREATE);
                 break;
@@ -186,13 +219,26 @@ public class MainActivity extends AppCompatActivity {
         switch (requestCode) {
             case REQUEST_CREATE:
                 if (resultCode == RESULT_OK) {
+                    Log.d(TAG, "Main.REQUEST_EDIT RESULT_OK");
                     int id = data.getIntExtra(ContactEditAddActivity.EXTRA_CONTACT_ID, 0);
                     manager.open();
-                    contactsAdapter.add(manager.getContact(id));
+                    updateListView();
                 }
                 break;
 
             case REQUEST_EDIT:
+                if (resultCode == RESULT_OK) {
+                    Log.d(TAG, "Main.REQUEST_EDIT RESULT_OK");
+                    manager.open();
+                    updateListView();
+                }
+                break;
+
+            case REQUEST_PREF:
+                if (resultCode == RESULT_OK) {
+                    Log.d(TAG, "Main.TREQUEST_PREF");
+                    updateButtonStyle();
+                }
                 break;
         }
     }

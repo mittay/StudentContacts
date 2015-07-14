@@ -41,6 +41,9 @@ public class ContactEditAddActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
+        ThemeUtils.onActivityCreateSetTheme(this);
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edite_contact);
         ButterKnife.bind(this);
