@@ -5,6 +5,7 @@
         <!-- Customize your theme here. -->
     </style>
 
+    <!-- Custom ligth button style. -->
     <style name="LigthButtonTheme" parent="Theme.AppCompat.Light">
         <item name="android:buttonStyle">@style/ButtonLigth</item>
         <item name="buttonStyle">@style/ButtonLigth</item>
@@ -16,7 +17,7 @@
         <item name="android:textStyle">bold</item>
     </style>
 
-
+    <!-- Custom dark button style. -->
     <style name="GreyButtonTheme" parent="Theme.AppCompat.Light">
         <item name="android:buttonStyle">@style/ButtonGrey</item>
         <item name="buttonStyle">@style/ButtonGrey</item>
