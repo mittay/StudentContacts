@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="button_ligth_focused_color_start">#7FA40E</color>
+    <color name="button_ligth_focused_color_end">#79C83F</color>
+    <color name="button_ligth_normal_color_start">#1f71df</color>
+    <color name="button_ligth_normal_color_end">#619be9</color>
+    <color name="button_ligth_pressed_color_start">#ff9ca2a4</color>
+    <color name="button_ligth_pressed_color_end">#ff9ca2a4</color>
+    <color name="White">#FFFFFF</color>
+    <color name="Dark">#ff010101</color>
+    <color name="button_dark_focused_color_start">#ffa41713</color>
+    <color name="button_dark_focused_color_end">#ffc87964</color>
+    <color name="button_dark_normal_color_start">#ffdf862d</color>
+    <color name="button_dark_normal_color_end">#ffe9c64a</color>
+    <color name="button_dark_pressed_color_start">#ffa47391</color>
+    <color name="button_dark_pressed_color_end">#ff863ec8</color>
+
+</resources>

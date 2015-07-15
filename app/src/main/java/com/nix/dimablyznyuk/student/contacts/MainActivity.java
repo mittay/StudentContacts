@@ -35,6 +35,7 @@ import butterknife.ButterKnife;
 
 public class MainActivity extends AppCompatActivity {
 
+
     public static final int REQUEST_EDIT = 1;
     public static final int REQUEST_CREATE = 2;
     public static final int REQUEST_PREF = 3;
@@ -42,6 +43,8 @@ public class MainActivity extends AppCompatActivity {
     public static final String TAG = "MainActivity";
     public static final String MALE = "Male";
     public static final String FEMALE = "Female";
+
+    SharedPreferences.OnSharedPreferenceChangeListener listener;
 
     @Bind(R.id.list_view)
     ListView lvContacts;
@@ -51,7 +54,6 @@ public class MainActivity extends AppCompatActivity {
     private ContactListAdapter contactsAdapter;
     private Manager manager;
     private SharedPreferences prefs;
-    private SharedPreferences.OnSharedPreferenceChangeListener listener;
 
 
     @Override
@@ -94,23 +96,26 @@ public class MainActivity extends AppCompatActivity {
                 startActivityForResult(intent, REQUEST_EDIT);
             }
         });
-        listener =
-                new SharedPreferences.OnSharedPreferenceChangeListener() {
-                    public void onSharedPreferenceChanged(SharedPreferences prefs, String key) {
-                        if (key.equals(PrefActivity.PREF_KEY_BUTTON_THEME)) {
-                            updateButtonStyle();
-                        }
-                        if (key.equals(PrefActivity.PREF_KEY_GENDER_FILTER)) {
-                            manager.open();
-                            updateListView();
-                        }
-                        if (key.equals(PrefActivity.PREF_KEY_FEMALE_COLOR)
-                                || key.equals(PrefActivity.PREF_KEY_MALE_COLOR)) {
-                            manager.open();
-                            updateListView();
-                        }
-                    }
-                };
+        listener = new SharedPreferences.OnSharedPreferenceChangeListener() {
+            public void onSharedPreferenceChanged(SharedPreferences prefs, String key) {
+                if (key.equals(PrefActivity.PREF_KEY_BUTTON_THEME)) {
+                    Log.d(TAG, "PREF_KEY_BUTTON_THEME");
+
+                    updateButtonStyle();
+                }
+                if (key.equals(PrefActivity.PREF_KEY_GENDER_FILTER)) {
+                    Log.d(TAG, "PREF_KEY_GENDER_FILTER");
+                    manager.open();
+                    updateListView();
+                }
+                if (key.equals(PrefActivity.PREF_KEY_FEMALE_COLOR)
+                        || key.equals(PrefActivity.PREF_KEY_MALE_COLOR)) {
+                    Log.d(TAG, "PREF_KEY_FEMALE_COLOR");
+                    manager.open();
+                    updateListView();
+                }
+            }
+        };
         prefs.registerOnSharedPreferenceChangeListener(listener);
     }
 
