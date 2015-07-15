@@ -37,6 +37,7 @@ public class ContactXMLSerializer {
     public static final String ADDRESS_TAG = "address";
     public static final String PHONE_TAG = "phone";
     public static final String GENDER_TAG = "gender";
+    public static final String PHOTO_TAG = "photo";
     public static final String CONTACT_TAG = "contact";
     public static final String CONTACTS_TAG = "contacts";
 
@@ -75,6 +76,7 @@ public class ContactXMLSerializer {
             String address = null;
             String phone = null;
             String gender = null;
+            String photo = null;
 
 
             while (eventType != XmlPullParser.END_DOCUMENT) {
@@ -101,11 +103,14 @@ public class ContactXMLSerializer {
                         gender = parser.getText();
                         Log.d(TAG, "gender" + name);
                     }
+                    if (PHOTO_TAG.equals(currentTag)) {
+                        photo = (parser.getText().equals("")) ? null : parser.getText();
+                    }
 
 
                 } else if (eventType == XmlPullParser.END_TAG) {
                     if (CONTACT_TAG.equals(parser.getName())) {
-                        result.add(new Contact(id, name, address, phone, gender));
+                        result.add(new Contact(id, name, address, phone, gender, photo));
                     }
                 }
                 eventType = parser.next();
@@ -178,6 +183,9 @@ public class ContactXMLSerializer {
                 serializer.startTag("", GENDER_TAG);
                 serializer.text(contact.getGender());
                 serializer.endTag("", GENDER_TAG);
+                serializer.startTag("", PHOTO_TAG);
+                serializer.text((contact.getPhoto() == null) ? "" : contact.getPhoto());
+                serializer.endTag("", PHOTO_TAG);
 
                 serializer.endTag("", CONTACT_TAG);
             }

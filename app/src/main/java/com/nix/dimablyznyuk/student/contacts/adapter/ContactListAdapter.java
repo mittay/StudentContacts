@@ -3,6 +3,7 @@ package com.nix.dimablyznyuk.student.contacts.adapter;
 import android.app.Activity;
 import android.content.SharedPreferences;
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.preference.PreferenceManager;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,8 +12,10 @@ import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.Filterable;
+import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.nix.dimablyznyuk.student.contacts.GetImageTask;
 import com.nix.dimablyznyuk.student.contacts.MainActivity;
 import com.nix.dimablyznyuk.student.contacts.PrefActivity;
 import com.nix.dimablyznyuk.student.contacts.R;
@@ -20,9 +23,7 @@ import com.nix.dimablyznyuk.student.contacts.model.Contact;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import butterknife.Bind;
-import butterknife.ButterKnife;
+import java.util.concurrent.ExecutionException;
 
 /**
  * Created by Dima Blyznyuk on 07.07.15.
@@ -35,6 +36,7 @@ public class ContactListAdapter extends ArrayAdapter<Contact> implements Filtera
     private List<Contact> checkedContacts = new ArrayList<Contact>();
     private boolean isCheckBoxVisible;
     private SharedPreferences sharedPref;
+    private Drawable drawable;
 
 
     public ContactListAdapter(Activity context, List<Contact> list) {
@@ -77,6 +79,8 @@ public class ContactListAdapter extends ArrayAdapter<Contact> implements Filtera
     }
 
     static class ViewHolder {
+
+        protected ImageView imageView;
         protected TextView text;
         protected CheckBox checkbox;
     }
@@ -88,6 +92,7 @@ public class ContactListAdapter extends ArrayAdapter<Contact> implements Filtera
             LayoutInflater inflator = context.getLayoutInflater();
             view = inflator.inflate(R.layout.list_view_item, null);
             final ViewHolder viewHolder = new ViewHolder();
+            viewHolder.imageView = (ImageView) view.findViewById(R.id.ivPhoto);
             viewHolder.text = (TextView) view.findViewById(R.id.tvContactName);
             viewHolder.checkbox = (CheckBox) view.findViewById(R.id.deleteCheckBox);
             viewHolder.checkbox
@@ -113,6 +118,15 @@ public class ContactListAdapter extends ArrayAdapter<Contact> implements Filtera
             ((ViewHolder) view.getTag()).checkbox.setTag(list.get(position));
         }
         ViewHolder holder = (ViewHolder) view.getTag();
+        try {
+            holder.imageView.setImageDrawable(new GetImageTask(context)
+                    .execute(list.get(position).getPhoto()).get());
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
+
         holder.text.setText(list.get(position).getName());
         holder.text.setTextColor(getColor(list.get(position)));
         holder.checkbox.setChecked(list.get(position).getSelected());

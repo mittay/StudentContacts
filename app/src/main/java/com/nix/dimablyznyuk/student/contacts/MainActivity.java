@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
 import android.preference.PreferenceManager;
@@ -38,10 +39,7 @@ public class MainActivity extends AppCompatActivity {
     public static final int REQUEST_CREATE = 2;
     public static final int REQUEST_PREF = 3;
 
-    public static final String EXTRA_ID = "id";
-
-    public final static String TAG = "MainActivity";
-
+    public static final String TAG = "MainActivity";
     public static final String MALE = "Male";
     public static final String FEMALE = "Female";
 
@@ -63,8 +61,6 @@ public class MainActivity extends AppCompatActivity {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        Log.d(TAG, "Main.onCreate()");
 
         ButterKnife.bind(this);
 
@@ -100,21 +96,21 @@ public class MainActivity extends AppCompatActivity {
         });
         listener =
                 new SharedPreferences.OnSharedPreferenceChangeListener() {
-            public void onSharedPreferenceChanged(SharedPreferences prefs, String key) {
-                if (key.equals(PrefActivity.PREF_KEY_BUTTON_THEME)) {
-                    updateButtonStyle();
-                }
-                if (key.equals(PrefActivity.PREF_KEY_GENDER_FILTER)) {
-                    manager.open();
-                    updateListView();
-                }
-                if (key.equals(PrefActivity.PREF_KEY_FEMALE_COLOR)
-                        || key.equals(PrefActivity.PREF_KEY_MALE_COLOR)) {
-                    manager.open();
-                    updateListView();
-                }
-            }
-        };
+                    public void onSharedPreferenceChanged(SharedPreferences prefs, String key) {
+                        if (key.equals(PrefActivity.PREF_KEY_BUTTON_THEME)) {
+                            updateButtonStyle();
+                        }
+                        if (key.equals(PrefActivity.PREF_KEY_GENDER_FILTER)) {
+                            manager.open();
+                            updateListView();
+                        }
+                        if (key.equals(PrefActivity.PREF_KEY_FEMALE_COLOR)
+                                || key.equals(PrefActivity.PREF_KEY_MALE_COLOR)) {
+                            manager.open();
+                            updateListView();
+                        }
+                    }
+                };
         prefs.registerOnSharedPreferenceChangeListener(listener);
     }
 
@@ -140,6 +136,7 @@ public class MainActivity extends AppCompatActivity {
             lvContacts.setAdapter(contactsAdapter);
         }
     }
+
     public void updateButtonStyle() {
         Log.d(TAG, "Main.updateButtonStyle()");
         if (prefs.getString(PrefActivity.PREF_KEY_BUTTON_THEME,
@@ -255,8 +252,8 @@ public class MainActivity extends AppCompatActivity {
         builder.setTitle(R.string.export_contacts_to);
         builder.setPositiveButton(R.string.internal, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                        new ContactXMLSerializer(MainActivity.this)
-                                .writeContacts(manager.getContacts(), ContactXMLSerializer.INTERNAL);
+                        new ExportContactsTask()
+                                .execute(ContactXMLSerializer.INTERNAL);
                     }
                 }
         );
@@ -264,13 +261,12 @@ public class MainActivity extends AppCompatActivity {
         builder.setNegativeButton(R.string.external, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         if (isExternalStorageWritable()) {
-                            new ContactXMLSerializer(MainActivity.this)
-                                    .writeContacts(manager.getContacts(),
-                                            ContactXMLSerializer.EXTERNAL);
+                            new ExportContactsTask()
+                                    .execute(ContactXMLSerializer.EXTERNAL);
                         } else {
                             Toast.makeText(MainActivity.this,
                                     getString(R.string.no_external_storage_available)
-                                    ,Toast.LENGTH_LONG).show();
+                                    , Toast.LENGTH_LONG).show();
                         }
                     }
                 }
@@ -285,11 +281,8 @@ public class MainActivity extends AppCompatActivity {
         builder.setTitle(R.string.import_contacts_from);
         builder.setPositiveButton(R.string.internal, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                        manager.removeAllContacts();
-                        manager.addContacts(new ContactXMLSerializer(MainActivity.this)
-                                .loadContacts(ContactXMLSerializer.INTERNAL));
-                        updateListView();
-
+                        new ImportContactsTask()
+                                .execute(ContactXMLSerializer.INTERNAL);
                     }
                 }
         );
@@ -297,14 +290,12 @@ public class MainActivity extends AppCompatActivity {
         builder.setNegativeButton(R.string.external, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         if (isExternalStorageReadable()) {
-                            manager.removeAllContacts();
-                            manager.addContacts(new ContactXMLSerializer(MainActivity.this)
-                                    .loadContacts(ContactXMLSerializer.EXTERNAL));
-                            updateListView();
+                            new ImportContactsTask().execute(ContactXMLSerializer.EXTERNAL);
+
                         } else {
                             Toast.makeText(MainActivity.this,
                                     getString(R.string.no_external_storage_available)
-                                    ,Toast.LENGTH_LONG).show();
+                                    , Toast.LENGTH_LONG).show();
                         }
                     }
                 }
@@ -330,5 +321,46 @@ public class MainActivity extends AppCompatActivity {
             return true;
         }
         return false;
+    }
+
+    private class ImportContactsTask extends AsyncTask<String, Void, List<Contact>> {
+
+        protected List<Contact> doInBackground(String... location) {
+            String loc = location[0];
+
+            List<Contact> contactsList = new ContactXMLSerializer(MainActivity.this)
+                    .loadContacts(loc);
+
+            return contactsList;
+        }
+
+        protected void onPostExecute(List<Contact> result) {
+            Toast.makeText(MainActivity.this, MainActivity.this.getString(R.string.imported)
+                            + result.size()
+                            + MainActivity.this.getString(R.string.contacts),
+                    Toast.LENGTH_LONG).show();
+            manager.removeAllContacts();
+            manager.addContacts(result);
+            updateListView();
+
+        }
+    }
+
+    private class ExportContactsTask extends AsyncTask<String, Void, Integer> {
+
+        protected Integer doInBackground(String... location) {
+            String loc = location[0];
+            List<Contact> listContact = manager.getContacts();
+            new ContactXMLSerializer(MainActivity.this)
+                    .writeContacts(listContact,
+                            loc);
+            return listContact.size();
+        }
+
+        protected void onPostExecute(Integer result) {
+            Toast.makeText(MainActivity.this, getString(R.string.exported) + result
+                            + MainActivity.this.getString(R.string.contacts),
+                    Toast.LENGTH_LONG).show();
+        }
     }
 }

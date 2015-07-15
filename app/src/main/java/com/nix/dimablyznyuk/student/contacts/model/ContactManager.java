@@ -28,12 +28,13 @@ public class ContactManager implements Manager {
     public void addContacts(List<Contact> list) {
         for (Contact c : list) {
             contacts.add(new Contact(id++, c.getName(), c.getAddress()
-                    , c.getPhoneNumber(), c.getGender()));
+                    , c.getPhoneNumber(), c.getGender(), c.getPhoto()));
         }
     }
 
-    public int createContact(String name, String address, String phone, String gender) {
-        contacts.add(new Contact(id++, name, address, phone, gender));
+    public int createContact(String name, String address, String phone, String gender,
+                             String photo) {
+        contacts.add(new Contact(id++, name, address, phone, gender, photo));
         return id;
     }
 

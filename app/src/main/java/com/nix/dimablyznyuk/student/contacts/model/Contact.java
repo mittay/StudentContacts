@@ -10,18 +10,21 @@ public class Contact {
     private String address;
     private String phoneNumber;
     private String gender;
+    private String photoPath;
     private boolean isSelected;
 
     public Contact() {
     }
 
-    public Contact(int id, String name, String address, String phoneNumber, String gender) {
+    public Contact(int id, String name, String address, String phoneNumber, String gender,
+                   String photo) {
 
         this.id = id;
         this.name = name;
         this.address = address;
         this.phoneNumber = phoneNumber;
         this.gender = gender;
+        this.photoPath = photo;
     }
 
     public int getId() {
@@ -72,9 +75,16 @@ public class Contact {
         this.isSelected = isSelected;
     }
 
+    public String getPhoto() {
+        return photoPath;
+    }
+
+    public void setPhoto(String photo) {
+        this.photoPath = photo;
+    }
+
     public String toString() {
         return getName();
     }
-
 
 }

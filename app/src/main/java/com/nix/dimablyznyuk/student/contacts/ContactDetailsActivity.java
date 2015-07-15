@@ -2,11 +2,14 @@ package com.nix.dimablyznyuk.student.contacts;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.nix.dimablyznyuk.student.contacts.model.Contact;
 import com.nix.dimablyznyuk.student.contacts.model.Manager;
 import com.nix.dimablyznyuk.student.contacts.model.SQLiteContactManager;
+
+import java.util.concurrent.ExecutionException;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -16,6 +19,9 @@ import butterknife.ButterKnife;
  */
 public class ContactDetailsActivity extends AppCompatActivity {
 
+    private Contact contact;
+    private Manager manager;
+
     @Bind(R.id.tvShowName)
     TextView tvShowName;
     @Bind(R.id.tvShowAddress)
@@ -24,9 +30,8 @@ public class ContactDetailsActivity extends AppCompatActivity {
     TextView tvShowPhoneNumber;
     @Bind(R.id.tvShowGender)
     TextView tvShowGender;
-
-    private Contact contact;
-    private Manager manager;
+    @Bind(R.id.ivDetailPhoto)
+    ImageView ivDetailPhoto;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,7 +42,6 @@ public class ContactDetailsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_contact);
         ButterKnife.bind(this);
 
-//        manager = ContactManager.getInstance();
         manager = new SQLiteContactManager(this);
         manager.open();
 
@@ -46,16 +50,24 @@ public class ContactDetailsActivity extends AppCompatActivity {
                 .EXTRA_CONTACT_ID);
         contact = manager.getContact(contactId);
 
-//        tvShowName = (TextView) findViewById(R.id.tvShowName);
-//        tvShowAddress = (TextView) findViewById(R.id.tvShowAddress);
-//        tvShowPhoneNumber = (TextView) findViewById(R.id.tvShowPhoneNumber);
-//        tvShowGender = (TextView) findViewById(R.id.tvShowGender);
-
         tvShowName.setText(contact.getName());
         tvShowAddress.setText(contact.getAddress());
         tvShowPhoneNumber.setText(contact.getPhoneNumber());
         tvShowGender.setText(contact.getGender());
+
+        showPhoto();
     }
+
+    private void showPhoto() {
+        try {
+            ivDetailPhoto.setImageDrawable(new GetImageTask(this).execute(contact.getPhoto()).get());
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
+    }
+
     @Override
     protected void onResume() {
         manager.open();
