@@ -75,7 +75,7 @@ public class ContactXMLSerializer {
             String name = null;
             String address = null;
             String phone = null;
-            String gender = null;
+            int gender = 0;
             String photo = null;
 
 
@@ -100,7 +100,7 @@ public class ContactXMLSerializer {
                         Log.d(TAG, "phone" + name);
                     }
                     if (GENDER_TAG.equals(currentTag)) {
-                        gender = parser.getText();
+                        gender = Integer.valueOf(parser.getText());
                         Log.d(TAG, "gender" + name);
                     }
                     if (PHOTO_TAG.equals(currentTag)) {
@@ -181,7 +181,7 @@ public class ContactXMLSerializer {
                 serializer.text(contact.getPhoneNumber());
                 serializer.endTag("", PHONE_TAG);
                 serializer.startTag("", GENDER_TAG);
-                serializer.text(contact.getGender());
+                serializer.text(String.valueOf(contact.getGender()));
                 serializer.endTag("", GENDER_TAG);
                 serializer.startTag("", PHOTO_TAG);
                 serializer.text((contact.getPhoto() == null) ? "" : contact.getPhoto());

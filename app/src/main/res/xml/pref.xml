@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
     android:key="first_preferencescreen">
-    <!--<ListPreference-->
-        <!--android:title="@string/select_how_to_show_gender"-->
-        <!--android:key="gender_priority"-->
-        <!--android:defaultValue="1"-->
-        <!--android:entries="@array/pref_list_array"-->
-        <!--android:entryValues="@array/pref_list_values" />-->
+
+    <ListPreference
+        android:title="@string/language"
+        android:key="locale"
+        android:defaultValue="1"
+        android:entries="@array/locale_array"
+        android:entryValues="@array/locale_values" />
     <ListPreference
         android:title="@string/gender_filter"
         android:key="gender_filter"

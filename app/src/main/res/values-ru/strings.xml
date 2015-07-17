@@ -1,0 +1,97 @@
+<resources>
+    <string name="add_contact">Добавить контакт</string>
+    <string name="edit_contact">Редактировать</string>
+    <string name="gender">Пол:</string>
+    <string name="phone_number">Номер телефона:</string>
+    <string name="address">Адрес:</string>
+    <string name="name">Имя:</string>
+    <string name="new_contact">Новый контакт</string>
+    <string name="contact_details">Детали контакта</string>
+    <string name="create_new_contact">Создать контакт</string>
+    <string name="contact_added">Контакт добавлен!</string>
+    <string name="contact_changed">Контакт изменен!</string>
+    <string name="please_fill_all_fields">Пожалуйста, заполните все поля!</string>
+    <string name="settings">Настройки</string>
+    <string name="delete">Удалить</string>
+    <string name="save">Сохранить</string>
+    <string name="cancel">Закрыть</string>
+    <string name="nothing_to_delete">Пусто!</string>
+    <string name="pref">Настройки</string>
+    <string name="select_male_text_color">Цвет текста для мужчин</string>
+    <string name="select_female_text_color">Цвет текста для женщин</string>
+    <string name="gender_filter">Фильтр по полу</string>
+    <string name="menu_import">Импорт</string>
+    <string name="menu_export">Экспорт</string>
+    <string name="select_save_to">Сохранить в</string>
+    <string name="external">Внешнее хранилище</string>
+    <string name="internal">Внутреннее хранилище</string>
+    <string name="load_from">Загрузить контакты с</string>
+    <string name="error_in_loading_xml">"Ошибка при загрузке XML-документа: "</string>
+    <string name="import_contacts_from">Загрузить контакты с</string>
+    <string name="export_contacts_to">Сохранить контакты на</string>
+    <string name="no_external_storage_available">Внешний накопитель недоступен</string>
+    <string name="button_style">Стиль кнопок</string>
+    <string name="select_photo_from">выбрать фото из</string>
+    <string name="Camera">Камера</string>
+    <string name="gallery">Галерея</string>
+    <string name="imported">"Загружено"</string>
+    <string name="contacts">" контактов"</string>
+    <string name="exported">"Сохранено "</string>
+    <string name="language">Язык</string>
+    <string name="male">Мужской</string>
+    <string name="female">Женский</string>
+
+
+    <string-array name="gender_array">
+        <item>Мужской</item>
+        <item>Женский</item>
+    </string-array>
+    <string-array name="style_array">
+        <item>Светлый</item>
+        <item>Темный</item>
+    </string-array>
+    <string-array name="style_values">
+        <item>1</item>
+        <item>2</item>
+    </string-array>
+    <string-array name="pref_list_values">
+        <item>1</item>
+        <item>2</item>
+    </string-array>
+    <string-array name="gender_filter_array">
+        <item>Мужчины</item>
+        <item>Женщины</item>
+        <item>Все</item>
+    </string-array>
+    <string-array name="gender_filter_values">
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+    </string-array>
+    gender_filter_array
+    <string-array name="pref_colors_array">
+        <item>Черный</item>
+        <item>Красный</item>
+        <item>Зеленый</item>
+        <item>Голубой</item>
+        <item>Желтый</item>
+    </string-array>
+    <string-array name="pref_colors_values">
+        <item>#000000</item>
+        <item>#FF0000</item>
+        <item>#00FF00</item>
+        <item>#0000FF</item>
+        <item>#FFFF00</item>
+    </string-array>
+    <string-array name="locale_array">
+        <item>Английский</item>
+        <item>Русский</item>
+        <item>По умолчанию</item>
+    </string-array>
+    <string-array name="locale_values">
+        <item>en</item>
+        <item>ru</item>
+        <item>default</item>
+
+    </string-array>
+</resources>

@@ -34,15 +34,18 @@ import butterknife.ButterKnife;
 public class ContactEditAddActivity extends AppCompatActivity {
 
     public static final String EXTRA_CONTACT_ID = "com.nix.dimablyznyuk.student.contacts.id";
-    public static final int EXTRA_PHOTO = 1;
+
+    public static final int REQUEST_CODE_GALLERY = 1;
+    public static final int REQUEST_CODE_CAMERA = 2;
+    public static final String DEFAULT_IMAGE = "default_image";
+
     public static final String PHOTO_FOLDER = "ContactsPhoto";
     public final static String TAG = "ContactEditAddActivity";
-    private String imagePath;
+    private String imagePath = DEFAULT_IMAGE;
     private Contact contact;
     private ArrayAdapter<CharSequence> spinnerAdapter;
     private Manager manager;
     private String path;
-
 
     @Bind(R.id.edtEditName)
     EditText edtName;
@@ -62,7 +65,7 @@ public class ContactEditAddActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
 
         ThemeUtils.onActivityCreateSetTheme(this);
-
+        LocaleUtils.onActivityCreateSetLocale(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edite_contact);
         ButterKnife.bind(this);
@@ -102,7 +105,7 @@ public class ContactEditAddActivity extends AppCompatActivity {
             spGender.setSelection(getPosition(contact));
             imagePath = contact.getPhoto();
             try {
-                ivDetailPhoto.setImageDrawable(new GetImageTask(this).execute(imagePath).get());
+                ivDetailPhoto.setImageBitmap(new GetImageTask(this).execute(imagePath).get());
             } catch (InterruptedException e) {
                 e.printStackTrace();
             } catch (ExecutionException e) {
@@ -124,7 +127,9 @@ public class ContactEditAddActivity extends AppCompatActivity {
     }
 
     private int getPosition(Contact c) {
-        return spinnerAdapter.getPosition(c.getGender());
+
+        return spinnerAdapter.getPosition(c.getGender() == MainActivity.MALE ? getResources().getString(R.string.male) :
+                getResources().getString(R.string.female));
     }
 
     private void setupAdapter(int stringArray) {
@@ -139,8 +144,7 @@ public class ContactEditAddActivity extends AppCompatActivity {
         String name = edtName.getText().toString();
         String address = edtAddress.getText().toString();
         String phoneNumber = edtPhoneNumber.getText().toString();
-        String gender = spGender.getSelectedItem().toString();
-
+        int gender = spGender.getSelectedItemPosition();
         if ((name.length() != 0) && (address.length() != 0) && (phoneNumber.length() != 0)) {
 
             if (contact == null) {
@@ -181,7 +185,7 @@ public class ContactEditAddActivity extends AppCompatActivity {
                     public void onClick(DialogInterface dialog, int id) {
                         Intent photoPickerIntent = new Intent(Intent.ACTION_PICK);
                         photoPickerIntent.setType("image/*");
-                        startActivityForResult(photoPickerIntent, EXTRA_PHOTO);
+                        startActivityForResult(photoPickerIntent, REQUEST_CODE_GALLERY);
                     }
                 }
         );
@@ -208,14 +212,14 @@ public class ContactEditAddActivity extends AppCompatActivity {
                 + "/" + PHOTO_FOLDER + "/" + "%s.png", newDate);
         File photo = new File(path);
         intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(photo));
-        startActivityForResult(intent, 2);
+        startActivityForResult(intent, REQUEST_CODE_CAMERA);
     }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if (requestCode == 1 && resultCode == RESULT_OK) {
+        if (requestCode == REQUEST_CODE_GALLERY && resultCode == RESULT_OK) {
             Uri photoUri = data.getData();
             if (photoUri != null) {
                 String[] filePathColumn = {MediaStore.Images.Media.DATA};
@@ -227,7 +231,7 @@ public class ContactEditAddActivity extends AppCompatActivity {
                 imagePath = filePath;
 
                 try {
-                    ivDetailPhoto.setImageDrawable(new GetImageTask(this)
+                    ivDetailPhoto.setImageBitmap(new GetImageTask(this)
                             .execute(imagePath).get());
                 } catch (InterruptedException e) {
                     e.printStackTrace();
@@ -237,10 +241,10 @@ public class ContactEditAddActivity extends AppCompatActivity {
             }
         }
 
-        if (requestCode == 2 && resultCode == RESULT_OK) {
+        if (requestCode == REQUEST_CODE_CAMERA && resultCode == RESULT_OK) {
             imagePath = path;
             try {
-                ivDetailPhoto.setImageDrawable(new GetImageTask(this).execute(imagePath).get());
+                ivDetailPhoto.setImageBitmap(new GetImageTask(this).execute(imagePath).get());
             } catch (InterruptedException e) {
                 e.printStackTrace();
             } catch (ExecutionException e) {

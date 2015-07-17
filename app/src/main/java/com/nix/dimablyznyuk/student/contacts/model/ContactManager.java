@@ -32,7 +32,7 @@ public class ContactManager implements Manager {
         }
     }
 
-    public int createContact(String name, String address, String phone, String gender,
+    public int createContact(String name, String address, String phone, int gender,
                              String photo) {
         contacts.add(new Contact(id++, name, address, phone, gender, photo));
         return id;
@@ -57,7 +57,7 @@ public class ContactManager implements Manager {
     public List<Contact> getContactsMale() {
         List<Contact> list = new ArrayList<Contact>();
         for (Contact c : contacts) {
-            if (c.getGender().equals(MainActivity.MALE)) {
+            if (c.getGender() == MainActivity.MALE) {
                 list.add(c);
             }
         }
@@ -67,7 +67,7 @@ public class ContactManager implements Manager {
     public List<Contact> getContactsFemale() {
         List<Contact> list = new ArrayList<Contact>();
         for (Contact c : contacts) {
-            if (c.getGender().equals(MainActivity.FEMALE)) {
+            if (c.getGender() == MainActivity.FEMALE) {
                 list.add(c);
             }
         }

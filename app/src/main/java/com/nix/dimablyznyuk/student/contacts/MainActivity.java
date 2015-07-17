@@ -41,8 +41,8 @@ public class MainActivity extends AppCompatActivity {
     public static final int REQUEST_PREF = 3;
 
     public static final String TAG = "MainActivity";
-    public static final String MALE = "Male";
-    public static final String FEMALE = "Female";
+    public static final int MALE = 0;
+    public static final int FEMALE = 1;
 
     SharedPreferences.OnSharedPreferenceChangeListener listener;
 
@@ -60,7 +60,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
 
         ThemeUtils.onActivityCreateSetTheme(this);
-
+        LocaleUtils.onActivityCreateSetLocale(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
@@ -80,7 +80,7 @@ public class MainActivity extends AppCompatActivity {
         lvContacts.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             public boolean onItemLongClick(AdapterView<?> parent, View view,
                                            int position, long id) {
-                Contact contact = (Contact) parent.getItemAtPosition(position);
+                Contact contact = (Contact) lvContacts.getItemAtPosition(position);
                 Intent intent = new Intent(MainActivity.this, ContactEditAddActivity.class);
                 intent.putExtra(ContactEditAddActivity.EXTRA_CONTACT_ID, contact.getId());
                 startActivityForResult(intent, REQUEST_EDIT);
@@ -90,7 +90,7 @@ public class MainActivity extends AppCompatActivity {
         lvContacts.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View view,
                                     int position, long id) {
-                Contact contact = (Contact) parent.getItemAtPosition(position);
+                Contact contact = (Contact) lvContacts.getItemAtPosition(position);
                 Intent intent = new Intent(MainActivity.this, ContactDetailsActivity.class);
                 intent.putExtra(ContactEditAddActivity.EXTRA_CONTACT_ID, contact.getId());
                 startActivityForResult(intent, REQUEST_EDIT);
@@ -113,6 +113,10 @@ public class MainActivity extends AppCompatActivity {
                     Log.d(TAG, "PREF_KEY_FEMALE_COLOR");
                     manager.open();
                     updateListView();
+                }
+                if (key.equals(PrefActivity.PREF_KEY_LOCALE)) {
+                    Log.d(TAG, "PREF_KEY_LOCALE");
+                    updateLocale();
                 }
             }
         };
@@ -158,6 +162,22 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    public void updateLocale() {
+        Log.d(TAG, "Main.updateLocale()");
+        if (prefs.getString(PrefActivity.PREF_KEY_LOCALE,
+                PrefActivity.VALUE_LOCALE_DEFAULT)
+                .equals(PrefActivity.VALUE_LOCALE_ENGLISH)) {
+            LocaleUtils.changeLocaleTo(this, LocaleUtils.LOCALE_EN);
+
+        } else if (prefs.getString(PrefActivity.PREF_KEY_LOCALE,
+                PrefActivity.VALUE_LOCALE_DEFAULT)
+                .equals(PrefActivity.VALUE_LOCALE_RUSSIAN)) {
+            LocaleUtils.changeLocaleTo(this, LocaleUtils.LOCALE_RU);
+        } else {
+            LocaleUtils.changeLocaleTo(this, LocaleUtils.LOCALE_DEFAULT);
+        }
+    }
+
     public void onClick(View v) {
 
         switch (v.getId()) {
@@ -175,8 +195,7 @@ public class MainActivity extends AppCompatActivity {
                 } else {
                     List<Contact> chackedContactList = contactsAdapter.getCheckedContacts();
                     manager.removeContacts(chackedContactList);
-                    contactsAdapter.removeChacked();
-                    contactsAdapter.notifyDataSetChanged();
+                    updateListView();
                 }
                 break;
 

@@ -9,14 +9,14 @@ public class Contact {
     private String name;
     private String address;
     private String phoneNumber;
-    private String gender;
+    private int gender; // Male = 0; Female = 1
     private String photoPath;
     private boolean isSelected;
 
     public Contact() {
     }
 
-    public Contact(int id, String name, String address, String phoneNumber, String gender,
+    public Contact(int id, String name, String address, String phoneNumber, int gender,
                    String photo) {
 
         this.id = id;
@@ -43,7 +43,7 @@ public class Contact {
         return phoneNumber;
     }
 
-    public String getGender() {
+    public int getGender() {
         return gender;
     }
 
@@ -67,7 +67,7 @@ public class Contact {
         this.phoneNumber = phoneNumber;
     }
 
-    public void setGender(String gender) {
+    public void setGender(int gender) {
         this.gender = gender;
     }
 

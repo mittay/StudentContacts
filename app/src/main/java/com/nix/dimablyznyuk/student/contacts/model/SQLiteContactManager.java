@@ -7,6 +7,7 @@ import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
+import com.nix.dimablyznyuk.student.contacts.MainActivity;
 import com.nix.dimablyznyuk.student.contacts.MySQLiteOpenHelper;
 
 import java.util.ArrayList;
@@ -60,7 +61,7 @@ public class SQLiteContactManager implements Manager {
     }
 
     @Override
-    public int createContact(String name, String address, String phone, String gender,
+    public int createContact(String name, String address, String phone, int gender,
                              String imagePath) {
         Log.d(TAG, "addContact");
 
@@ -119,7 +120,7 @@ public class SQLiteContactManager implements Manager {
         contacts.setName(cursor.getString(COLUMN_NAME));
         contacts.setAddress(cursor.getString(COLUMN_ADDRESS));
         contacts.setPhoneNumber(cursor.getString(COLUMN_PHONE));
-        contacts.setGender(cursor.getString(COLUMN_GENDER));
+        contacts.setGender(cursor.getInt(COLUMN_GENDER));
         contacts.setPhoto(cursor.getString(COLUMN_PHOTO));
 
         return contacts;
@@ -158,7 +159,7 @@ public class SQLiteContactManager implements Manager {
 
         Cursor cursor = database.query(MySQLiteOpenHelper.TABLE_CONTACTS,
                 allColumns, MySQLiteOpenHelper.COLUMN_GENDER + " = "
-                        + "'Female'", null, null, null, null);
+                        + "'"+ MainActivity.FEMALE +"'", null, null, null, null);
 
         cursor.moveToFirst();
         while (!cursor.isAfterLast()) {
@@ -177,7 +178,7 @@ public class SQLiteContactManager implements Manager {
 
         Cursor cursor = database.query(MySQLiteOpenHelper.TABLE_CONTACTS,
                 allColumns, MySQLiteOpenHelper.COLUMN_GENDER + " = "
-                        + "'Male'", null, null, null, null);
+                        + "'"+ MainActivity.MALE +"'", null, null, null, null);
 
         cursor.moveToFirst();
         while (!cursor.isAfterLast()) {

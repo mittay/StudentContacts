@@ -9,13 +9,13 @@ import android.preference.PreferenceManager;
  * Created by Dima Blyznyuk on 13.07.15.
  */
 public class ThemeUtils {
-    private static int mTheme;
+    private static int theme;
 
     public final static int THEME_LIGTH = 0;
     public final static int THEME_DARK = 1;
 
     public static void changeToTheme(Activity activity, int theme) {
-        mTheme = theme;
+        ThemeUtils.theme = theme;
         activity.finish();
         Intent intent = new Intent(activity, activity.getClass());
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
@@ -28,11 +28,11 @@ public class ThemeUtils {
         if (prefs.getString(PrefActivity.PREF_KEY_BUTTON_THEME,
                 PrefActivity.VALUE_BUTTON_STANDART)
                 .equals(PrefActivity.VALUE_BUTTON_LIGTH)) {
-            mTheme = THEME_LIGTH;
+            theme = THEME_LIGTH;
         } else {
-            mTheme = THEME_DARK;
+            theme = THEME_DARK;
         }
-        switch (mTheme) {
+        switch (theme) {
 
             default:
             case THEME_LIGTH:

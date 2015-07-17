@@ -36,6 +36,7 @@ public class MySQLiteOpenHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase database) {
+
         database.execSQL(DATABASE_CREATE);
     }
 

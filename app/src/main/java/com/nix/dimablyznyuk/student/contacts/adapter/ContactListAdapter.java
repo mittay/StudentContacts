@@ -2,9 +2,11 @@ package com.nix.dimablyznyuk.student.contacts.adapter;
 
 import android.app.Activity;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.preference.PreferenceManager;
+import android.support.v4.util.LruCache;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -37,26 +39,28 @@ public class ContactListAdapter extends ArrayAdapter<Contact> implements Filtera
     private boolean isCheckBoxVisible;
     private SharedPreferences sharedPref;
     private Drawable drawable;
+    LruCache<String, Bitmap> mMemoryCache;
 
 
     public ContactListAdapter(Activity context, List<Contact> list) {
         super(context, R.layout.list_view_item, list);
         this.context = context;
         this.list.addAll(list);
+
+        final int maxMemory = (int) (Runtime.getRuntime().maxMemory());
+        final int cacheSize = maxMemory / 8;
+
+        mMemoryCache = new LruCache<String, Bitmap>(cacheSize) {
+            @Override
+            protected int sizeOf(String key, Bitmap bitmap) {
+                return bitmap.getRowBytes() * bitmap.getHeight();
+            }
+        };
     }
 
     @Override
     public int getCount() {
         return list.size();
-    }
-
-    public void addContactList(List<Contact> contacts) {
-        list.clear();
-        list.addAll(contacts);
-    }
-
-    public void addContact(Contact contact) {
-        list.add(contact);
     }
 
     public void setVisibleCheckBox(boolean b) {
@@ -72,10 +76,6 @@ public class ContactListAdapter extends ArrayAdapter<Contact> implements Filtera
         for (Contact c : list) {
             c.setSelected(false);
         }
-    }
-
-    public void removeChacked() {
-        list.removeAll(checkedContacts);
     }
 
     static class ViewHolder {
@@ -118,15 +118,9 @@ public class ContactListAdapter extends ArrayAdapter<Contact> implements Filtera
             ((ViewHolder) view.getTag()).checkbox.setTag(list.get(position));
         }
         ViewHolder holder = (ViewHolder) view.getTag();
-        try {
-            holder.imageView.setImageDrawable(new GetImageTask(context)
-                    .execute(list.get(position).getPhoto()).get());
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        } catch (ExecutionException e) {
-            e.printStackTrace();
-        }
 
+        Bitmap bitmap = getBitmap(position);
+        holder.imageView.setImageBitmap(bitmap);
         holder.text.setText(list.get(position).getName());
         holder.text.setTextColor(getColor(list.get(position)));
         holder.checkbox.setChecked(list.get(position).getSelected());
@@ -138,12 +132,38 @@ public class ContactListAdapter extends ArrayAdapter<Contact> implements Filtera
 
         sharedPref = PreferenceManager.getDefaultSharedPreferences(context);
 
-        if (c.getGender().equals(MainActivity.MALE)) {
+        if (c.getGender() == 0) {
             return (Color.parseColor(sharedPref.getString(PrefActivity.PREF_KEY_MALE_COLOR,
                     PrefActivity.DEFAULT_COLOR)));
         } else {
             return (Color.parseColor(sharedPref.getString(PrefActivity.PREF_KEY_FEMALE_COLOR,
                     PrefActivity.DEFAULT_COLOR)));
         }
+    }
+    private Bitmap getBitmap(int position) {
+        String filePath = getItem(position).getPhoto();
+        Bitmap bitmap = getBitmapFromMemCache(filePath);
+        if (bitmap == null) {
+            try {
+                bitmap = new GetImageTask(context).execute(filePath).get();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            } catch (ExecutionException e) {
+                e.printStackTrace();
+            }
+            addBitmapToMemoryCache(filePath, bitmap);
+        }
+        return bitmap;
+
+    }
+
+    public void addBitmapToMemoryCache(String key, Bitmap bitmap) {
+        if (getBitmapFromMemCache(key) == null) {
+            mMemoryCache.put(key, bitmap);
+        }
+    }
+
+    public Bitmap getBitmapFromMemCache(String key) {
+        return mMemoryCache.get(key);
     }
 }

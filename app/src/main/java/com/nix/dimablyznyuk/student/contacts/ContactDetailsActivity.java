@@ -37,14 +37,14 @@ public class ContactDetailsActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
 
         ThemeUtils.onActivityCreateSetTheme(this);
-
+        LocaleUtils.onActivityCreateSetLocale(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_contact);
+
         ButterKnife.bind(this);
 
         manager = new SQLiteContactManager(this);
         manager.open();
-
 
         int contactId = getIntent().getExtras().getInt(ContactEditAddActivity
                 .EXTRA_CONTACT_ID);
@@ -53,14 +53,13 @@ public class ContactDetailsActivity extends AppCompatActivity {
         tvShowName.setText(contact.getName());
         tvShowAddress.setText(contact.getAddress());
         tvShowPhoneNumber.setText(contact.getPhoneNumber());
-        tvShowGender.setText(contact.getGender());
-
-        showPhoto();
+        tvShowGender.setText(contact.getGender() == MainActivity.MALE ? getResources()
+                .getString(R.string.male) : getResources().getString(R.string.female));
     }
 
     private void showPhoto() {
         try {
-            ivDetailPhoto.setImageDrawable(new GetImageTask(this).execute(contact.getPhoto()).get());
+            ivDetailPhoto.setImageBitmap(new GetImageTask(this).execute(contact.getPhoto()).get());
         } catch (InterruptedException e) {
             e.printStackTrace();
         } catch (ExecutionException e) {
@@ -70,13 +69,14 @@ public class ContactDetailsActivity extends AppCompatActivity {
 
     @Override
     protected void onResume() {
-        manager.open();
         super.onResume();
+        manager.open();
+        showPhoto();
     }
 
     @Override
     protected void onPause() {
-        manager.close();
         super.onPause();
+        manager.close();
     }
 }
