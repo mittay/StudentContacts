@@ -17,6 +17,7 @@ public class MySQLiteOpenHelper extends SQLiteOpenHelper {
     public static final String COLUMN_PHONE = "phone";
     public static final String COLUMN_GENDER = "gender";
     public static final String COLUMN_PHOTO = "photo";
+    public static final String COLUMN_DATE = "date";
 
     private static final String DATABASE_NAME = "contacts.db";
     private static final int DATABASE_VERSION = 1;
@@ -28,7 +29,8 @@ public class MySQLiteOpenHelper extends SQLiteOpenHelper {
             + " text not null, " + COLUMN_PHONE
             + " text not null, " + COLUMN_GENDER
             + " text not null, " + COLUMN_PHOTO
-            + " text);";
+            + " text, " + COLUMN_DATE
+            + " int " + ")";
 
     public MySQLiteOpenHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);

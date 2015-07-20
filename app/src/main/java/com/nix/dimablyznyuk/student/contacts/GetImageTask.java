@@ -4,6 +4,7 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 
@@ -39,6 +40,7 @@ public class GetImageTask extends AsyncTask<String, Void, Bitmap> {
                 && new File(imagePath[0]).exists()) {
 
             bitmap = BitmapFactory.decodeFile(imagePath[0], null);
+
             bitmap = Bitmap.createScaledBitmap(bitmap, WIDTH, HEIGTH, true);
         } else {
             bitmap = BitmapFactory.decodeResource(context.getResources(),
@@ -50,4 +52,5 @@ public class GetImageTask extends AsyncTask<String, Void, Bitmap> {
     protected void onPostExecute(Bitmap v) {
         progDialog.dismiss();
     }
+
 }
