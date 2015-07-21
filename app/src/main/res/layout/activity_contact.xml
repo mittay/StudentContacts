@@ -122,6 +122,28 @@
                     android:layout_weight="1"
                     android:textAppearance="?android:attr/textAppearanceLarge" />
             </TableRow>
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <TextView
+                    android:id="@+id/tvDateBirthday"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_column="1"
+                    android:layout_weight="1"
+                    android:padding="10dp"
+                    android:text="@string/date_of_birth"
+                    android:textAppearance="?android:attr/textAppearanceLarge" />
+
+                <TextView
+                    android:id="@+id/tvDate"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_column="2"
+                    android:layout_weight="1"
+                    android:textAppearance="?android:attr/textAppearanceLarge" />
+            </TableRow>
         </TableLayout>
     </ScrollView>
 </RelativeLayout>

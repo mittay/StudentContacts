@@ -1,6 +1,7 @@
 <resources>
     <string name="add_contact">Добавить контакт</string>
     <string name="edit_contact">Редактировать</string>
+    <string name="select_date">Выберите дату</string>
     <string name="gender">Пол:</string>
     <string name="phone_number">Номер телефона:</string>
     <string name="address">Адрес:</string>
@@ -34,14 +35,36 @@
     <string name="select_photo_from">выбрать фото из</string>
     <string name="Camera">Камера</string>
     <string name="gallery">Галерея</string>
-    <string name="imported">"Загружено"</string>
+    <string name="imported">"Загружено "</string>
     <string name="contacts">" контактов"</string>
     <string name="exported">"Сохранено "</string>
     <string name="language">Язык</string>
     <string name="male">Мужской</string>
     <string name="female">Женский</string>
-
-
+    <string name="date_of_birth">Дата рождения</string>
+    <string-array name="week_day_array">
+        <item>Вс</item>
+        <item>Пн</item>
+        <item>Вт</item>
+        <item>Ср</item>
+        <item>Чт</item>
+        <item>Пт</item>
+        <item>Сб</item>
+    </string-array>
+    <string-array name="month_name_with_locale">
+        <item>Январь</item>
+        <item>Февраль</item>
+        <item>Март</item>
+        <item>Апрель</item>
+        <item>Май</item>
+        <item>Июнь</item>
+        <item>Июль</item>
+        <item>Август</item>
+        <item>Сентябрь</item>
+        <item>Октябрь</item>
+        <item>Ноябрь</item>
+        <item>Декабрь</item>
+    </string-array>
     <string-array name="gender_array">
         <item>Мужской</item>
         <item>Женский</item>

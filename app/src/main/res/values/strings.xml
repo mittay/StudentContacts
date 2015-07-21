@@ -2,6 +2,7 @@
     <string name="app_name">Contacts</string>
     <string name="add_contact">Add contact</string>
     <string name="edit_contact">Edit contact</string>
+    <string name="select_date">Select date</string>
     <string name="gender">Gender:</string>
     <string name="phone_number">Phone number:</string>
     <string name="address">Address:</string>
@@ -42,6 +43,34 @@
     <string name="language">Language</string>
     <string name="male">Male</string>
     <string name="female">Female</string>
+    <string name="date_of_birth">Date of Birth</string>
+    <string-array name="week_day_array">
+        <item>Sun</item>
+        <item>Mon</item>
+        <item>Tue</item>
+        <item>Wen</item>
+        <item>Thu</item>
+        <item>Wri</item>
+        <item>Sat</item>
+    </string-array>
+    <string-array name="month_name">
+        <item>January</item>
+        <item>February</item>
+        <item>March</item>
+        <item>April</item>
+        <item>May</item>
+        <item>June</item>
+        <item>July</item>
+        <item>August</item>
+        <item>September</item>
+        <item>October</item>
+        <item>November</item>
+        <item>December</item>
+    </string-array>
+    <string-array name="button_label">
+        <item>&#x003c;</item>
+        <item>&#x003e;</item>
+    </string-array>
 
 
     <string-array name="gender_array">

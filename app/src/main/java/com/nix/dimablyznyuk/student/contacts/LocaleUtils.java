@@ -13,7 +13,7 @@ import java.util.Locale;
  * Created by Dima Blyznyuk on 13.07.15.
  */
 public class LocaleUtils {
-    private static int locale;
+    public static int locale;
 
     public final static int LOCALE_EN = 0;
     public final static int LOCALE_RU = 1;
@@ -68,5 +68,6 @@ public class LocaleUtils {
         activity.getBaseContext().getResources().updateConfiguration(config,
                 activity.getBaseContext().getResources().getDisplayMetrics());
     }
+
 }
 

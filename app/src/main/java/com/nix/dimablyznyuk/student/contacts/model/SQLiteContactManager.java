@@ -25,6 +25,7 @@ public class SQLiteContactManager implements Manager {
     public static final int COLUMN_PHONE = 3;
     public static final int COLUMN_GENDER = 4;
     public static final int COLUMN_PHOTO = 5;
+    public static final int COLUMN_DATE = 6;
 
     public final static String TAG = "SQLiteContactManager";
 
@@ -35,7 +36,8 @@ public class SQLiteContactManager implements Manager {
             MySQLiteOpenHelper.COLUMN_ADDRESS,
             MySQLiteOpenHelper.COLUMN_PHONE,
             MySQLiteOpenHelper.COLUMN_GENDER,
-            MySQLiteOpenHelper.COLUMN_PHOTO
+            MySQLiteOpenHelper.COLUMN_PHOTO,
+            MySQLiteOpenHelper.COLUMN_DATE
     };
 
     public SQLiteContactManager(Context context) {
@@ -56,13 +58,13 @@ public class SQLiteContactManager implements Manager {
     public void addContacts(List<Contact> list) {
         for (Contact c : list) {
             createContact(c.getName(), c.getAddress(), c.getPhoneNumber(),
-                    c.getGender(), c.getPhoto());
+                    c.getGender(), c.getPhoto(), c.getDateBirthday());
         }
     }
 
     @Override
     public int createContact(String name, String address, String phone, int gender,
-                             String imagePath) {
+                             String imagePath, String date) {
         Log.d(TAG, "addContact");
 
         ContentValues values = new ContentValues();
@@ -72,6 +74,7 @@ public class SQLiteContactManager implements Manager {
         values.put(MySQLiteOpenHelper.COLUMN_PHONE, phone);
         values.put(MySQLiteOpenHelper.COLUMN_GENDER, gender);
         values.put(MySQLiteOpenHelper.COLUMN_PHOTO, imagePath);
+        values.put(MySQLiteOpenHelper.COLUMN_DATE, date);
         long insertId = database.insert(MySQLiteOpenHelper.TABLE_CONTACTS, null,
                 values);
         Log.d(TAG, "addContact" + insertId);
@@ -122,6 +125,7 @@ public class SQLiteContactManager implements Manager {
         contacts.setPhoneNumber(cursor.getString(COLUMN_PHONE));
         contacts.setGender(cursor.getInt(COLUMN_GENDER));
         contacts.setPhoto(cursor.getString(COLUMN_PHOTO));
+        contacts.setDateBirthday(cursor.getString(COLUMN_DATE));
 
         return contacts;
     }
@@ -148,8 +152,10 @@ public class SQLiteContactManager implements Manager {
         cursor.moveToFirst();
         while (!cursor.isAfterLast()) {
             Contact contact = cursorToContact(cursor);
+            cursor.close();
             return contact;
         }
+        cursor.close();
         return null;
     }
 
@@ -209,6 +215,8 @@ public class SQLiteContactManager implements Manager {
         values.put(MySQLiteOpenHelper.COLUMN_PHONE, contact.getPhoneNumber());
         values.put(MySQLiteOpenHelper.COLUMN_GENDER, contact.getGender());
         values.put(MySQLiteOpenHelper.COLUMN_PHOTO, contact.getPhoto());
+        values.put(MySQLiteOpenHelper.COLUMN_DATE, contact.getDateBirthday());
+
 
         database.update(MySQLiteOpenHelper.TABLE_CONTACTS,
                 values, MySQLiteOpenHelper.COLUMN_ID + " = " + contact.getId(), null);

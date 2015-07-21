@@ -188,13 +188,14 @@ public class MainActivity extends AppCompatActivity {
                 break;
 
             case R.id.btnDelete:
-                if (contactsAdapter.getCheckedContacts().isEmpty()) {
+                if (contactsAdapter.getCheckedContacts().isEmpty() &&
+                        (contactsAdapter.getCount() != 0)) {
                     btnCancel.setVisibility(View.VISIBLE);
                     contactsAdapter.setVisibleCheckBox(true);
                     contactsAdapter.notifyDataSetChanged();
                 } else {
-                    List<Contact> chackedContactList = contactsAdapter.getCheckedContacts();
-                    manager.removeContacts(chackedContactList);
+                    List<Contact> checkedContactList = contactsAdapter.getCheckedContacts();
+                    manager.removeContacts(checkedContactList);
                     updateListView();
                 }
                 break;

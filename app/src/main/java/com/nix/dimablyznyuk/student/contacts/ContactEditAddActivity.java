@@ -9,12 +9,14 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.nix.dimablyznyuk.student.contacts.model.Contact;
@@ -22,6 +24,7 @@ import com.nix.dimablyznyuk.student.contacts.model.Manager;
 import com.nix.dimablyznyuk.student.contacts.model.SQLiteContactManager;
 
 import java.io.File;
+import java.text.ParseException;
 import java.util.Calendar;
 import java.util.concurrent.ExecutionException;
 
@@ -37,8 +40,9 @@ public class ContactEditAddActivity extends AppCompatActivity {
 
     public static final int REQUEST_CODE_GALLERY = 1;
     public static final int REQUEST_CODE_CAMERA = 2;
-    public static final String DEFAULT_IMAGE = "default_image";
+    public static final int REQUEST_CODE_DATE = 3;
 
+    public static final String DEFAULT_IMAGE = "default_image";
     public static final String PHOTO_FOLDER = "ContactsPhoto";
     public final static String TAG = "ContactEditAddActivity";
     private String imagePath = DEFAULT_IMAGE;
@@ -59,7 +63,10 @@ public class ContactEditAddActivity extends AppCompatActivity {
     Spinner spGender;
     @Bind(R.id.ivEditPhoto)
     ImageView ivDetailPhoto;
-
+    @Bind(R.id.tvEditDateBirthday)
+    TextView tvEditDateBirthday;
+    @Bind(R.id.edtEditdateBirthday)
+    EditText edtEditdateBirthday;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -104,6 +111,8 @@ public class ContactEditAddActivity extends AppCompatActivity {
             edtPhoneNumber.setText(contact.getPhoneNumber());
             spGender.setSelection(getPosition(contact));
             imagePath = contact.getPhoto();
+            edtEditdateBirthday.setText(contact.getDateBirthday());
+
             try {
                 ivDetailPhoto.setImageBitmap(new GetImageTask(this).execute(imagePath).get());
             } catch (InterruptedException e) {
@@ -112,6 +121,13 @@ public class ContactEditAddActivity extends AppCompatActivity {
                 e.printStackTrace();
             }
         }
+        edtEditdateBirthday.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivityForResult(new Intent(ContactEditAddActivity.this,
+                        CalendarActivity.class), REQUEST_CODE_DATE);
+            }
+        });
     }
 
     @Override
@@ -139,16 +155,20 @@ public class ContactEditAddActivity extends AppCompatActivity {
         spGender.setAdapter(spinnerAdapter);
     }
 
-    public void onClick(View v) {
+    public void onClick(View v) throws ParseException {
 
         String name = edtName.getText().toString();
         String address = edtAddress.getText().toString();
         String phoneNumber = edtPhoneNumber.getText().toString();
         int gender = spGender.getSelectedItemPosition();
-        if ((name.length() != 0) && (address.length() != 0) && (phoneNumber.length() != 0)) {
+        String date = edtEditdateBirthday.getText().toString();
+
+        if ((name.length() != 0) && (address.length() != 0)
+                && (phoneNumber.length() != 0)) {
 
             if (contact == null) {
-                int id = manager.createContact(name, address, phoneNumber, gender, imagePath);
+                int id = manager.createContact(name, address, phoneNumber, gender,
+                        imagePath, date);
                 Toast.makeText(this, R.string.contact_added, Toast.LENGTH_LONG).show();
                 this.setResult(RESULT_OK, new Intent().putExtra(
                         ContactEditAddActivity.EXTRA_CONTACT_ID, id));
@@ -158,6 +178,7 @@ public class ContactEditAddActivity extends AppCompatActivity {
                 contact.setPhoneNumber(phoneNumber);
                 contact.setGender(gender);
                 contact.setPhoto(imagePath);
+                contact.setDateBirthday(date);
 
                 manager.updateContact(contact);
                 Toast.makeText(this, R.string.contact_changed, Toast.LENGTH_LONG).show();
@@ -251,5 +272,15 @@ public class ContactEditAddActivity extends AppCompatActivity {
                 e.printStackTrace();
             }
         }
+        if (requestCode == REQUEST_CODE_DATE && resultCode == RESULT_OK) {
+            if (data == null) {
+                return;
+            }
+            String date = data.getStringExtra(CalendarActivity.EXTRA_DATE);
+            Log.d(TAG, " " + date);
+            edtEditdateBirthday.setText(date);
+
+        }
     }
+
 }

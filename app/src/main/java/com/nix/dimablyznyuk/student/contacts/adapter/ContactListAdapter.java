@@ -80,21 +80,21 @@ public class ContactListAdapter extends ArrayAdapter<Contact> implements Filtera
 
     static class ViewHolder {
 
-        protected ImageView imageView;
-        protected TextView text;
-        protected CheckBox checkbox;
+        ImageView imageView;
+        TextView text;
+        CheckBox checkbox;
     }
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        View view = null;
+
         if (convertView == null) {
             LayoutInflater inflator = context.getLayoutInflater();
-            view = inflator.inflate(R.layout.list_view_item, null);
+            convertView = inflator.inflate(R.layout.list_view_item, null);
             final ViewHolder viewHolder = new ViewHolder();
-            viewHolder.imageView = (ImageView) view.findViewById(R.id.ivPhoto);
-            viewHolder.text = (TextView) view.findViewById(R.id.tvContactName);
-            viewHolder.checkbox = (CheckBox) view.findViewById(R.id.deleteCheckBox);
+            viewHolder.imageView = (ImageView) convertView.findViewById(R.id.ivPhoto);
+            viewHolder.text = (TextView) convertView.findViewById(R.id.tvContactName);
+            viewHolder.checkbox = (CheckBox) convertView.findViewById(R.id.deleteCheckBox);
             viewHolder.checkbox
                     .setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
 
@@ -111,13 +111,13 @@ public class ContactListAdapter extends ArrayAdapter<Contact> implements Filtera
                             }
                         }
                     });
-            view.setTag(viewHolder);
+            convertView.setTag(viewHolder);
             viewHolder.checkbox.setTag(list.get(position));
         } else {
-            view = convertView;
-            ((ViewHolder) view.getTag()).checkbox.setTag(list.get(position));
+
+            ((ViewHolder) convertView.getTag()).checkbox.setTag(list.get(position));
         }
-        ViewHolder holder = (ViewHolder) view.getTag();
+        ViewHolder holder = (ViewHolder) convertView.getTag();
 
         Bitmap bitmap = getBitmap(position);
         holder.imageView.setImageBitmap(bitmap);
@@ -125,7 +125,7 @@ public class ContactListAdapter extends ArrayAdapter<Contact> implements Filtera
         holder.text.setTextColor(getColor(list.get(position)));
         holder.checkbox.setChecked(list.get(position).getSelected());
         holder.checkbox.setVisibility(isCheckBoxVisible ? View.VISIBLE : View.INVISIBLE);
-        return view;
+        return convertView;
     }
 
     private int getColor(Contact c) {

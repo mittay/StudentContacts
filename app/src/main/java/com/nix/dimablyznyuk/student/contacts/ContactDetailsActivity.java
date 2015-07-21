@@ -32,6 +32,10 @@ public class ContactDetailsActivity extends AppCompatActivity {
     TextView tvShowGender;
     @Bind(R.id.ivDetailPhoto)
     ImageView ivDetailPhoto;
+    @Bind(R.id.tvDateBirthday)
+    TextView tvDateBirthday;
+    @Bind(R.id.tvDate)
+    TextView tvDate;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,6 +46,7 @@ public class ContactDetailsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_contact);
 
         ButterKnife.bind(this);
+        this.setTitle(R.string.contact_details);
 
         manager = new SQLiteContactManager(this);
         manager.open();
@@ -55,6 +60,7 @@ public class ContactDetailsActivity extends AppCompatActivity {
         tvShowPhoneNumber.setText(contact.getPhoneNumber());
         tvShowGender.setText(contact.getGender() == MainActivity.MALE ? getResources()
                 .getString(R.string.male) : getResources().getString(R.string.female));
+        tvDate.setText(contact.getDateBirthday());
     }
 
     private void showPhoto() {

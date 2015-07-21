@@ -11,13 +11,14 @@ public class Contact {
     private String phoneNumber;
     private int gender; // Male = 0; Female = 1
     private String photoPath;
+    private String dateBirthday;
     private boolean isSelected;
 
     public Contact() {
     }
 
     public Contact(int id, String name, String address, String phoneNumber, int gender,
-                   String photo) {
+                   String photo, String dateBirthday) {
 
         this.id = id;
         this.name = name;
@@ -25,6 +26,7 @@ public class Contact {
         this.phoneNumber = phoneNumber;
         this.gender = gender;
         this.photoPath = photo;
+        this.dateBirthday = dateBirthday;
     }
 
     public int getId() {
@@ -45,6 +47,14 @@ public class Contact {
 
     public int getGender() {
         return gender;
+    }
+
+    public String getPhoto() {
+        return photoPath;
+    }
+
+    public String getDateBirthday() {
+        return dateBirthday;
     }
 
     public boolean getSelected() {
@@ -71,12 +81,12 @@ public class Contact {
         this.gender = gender;
     }
 
-    public void setSelected(boolean isSelected) {
-        this.isSelected = isSelected;
+    public void setDateBirthday(String dateBirthday) {
+        this.dateBirthday = dateBirthday;
     }
 
-    public String getPhoto() {
-        return photoPath;
+    public void setSelected(boolean isSelected) {
+        this.isSelected = isSelected;
     }
 
     public void setPhoto(String photo) {
