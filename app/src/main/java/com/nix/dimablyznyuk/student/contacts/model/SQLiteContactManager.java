@@ -52,6 +52,7 @@ public class SQLiteContactManager implements Manager {
     @Override
     public void close() {
         dbHelper.close();
+        database.close();
     }
 
     @Override
@@ -64,7 +65,7 @@ public class SQLiteContactManager implements Manager {
 
     @Override
     public int createContact(String name, String address, String phone, int gender,
-                             String imagePath, String date) {
+                             String imagePath, long date) {
         Log.d(TAG, "addContact");
 
         ContentValues values = new ContentValues();
@@ -125,7 +126,7 @@ public class SQLiteContactManager implements Manager {
         contacts.setPhoneNumber(cursor.getString(COLUMN_PHONE));
         contacts.setGender(cursor.getInt(COLUMN_GENDER));
         contacts.setPhoto(cursor.getString(COLUMN_PHOTO));
-        contacts.setDateBirthday(cursor.getString(COLUMN_DATE));
+        contacts.setDateBirthday(cursor.getLong(COLUMN_DATE));
 
         return contacts;
     }
@@ -216,7 +217,6 @@ public class SQLiteContactManager implements Manager {
         values.put(MySQLiteOpenHelper.COLUMN_GENDER, contact.getGender());
         values.put(MySQLiteOpenHelper.COLUMN_PHOTO, contact.getPhoto());
         values.put(MySQLiteOpenHelper.COLUMN_DATE, contact.getDateBirthday());
-
 
         database.update(MySQLiteOpenHelper.TABLE_CONTACTS,
                 values, MySQLiteOpenHelper.COLUMN_ID + " = " + contact.getId(), null);

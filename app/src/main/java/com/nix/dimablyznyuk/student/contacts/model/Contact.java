@@ -11,14 +11,14 @@ public class Contact {
     private String phoneNumber;
     private int gender; // Male = 0; Female = 1
     private String photoPath;
-    private String dateBirthday;
+    private long dateBirthday;
     private boolean isSelected;
 
     public Contact() {
     }
 
     public Contact(int id, String name, String address, String phoneNumber, int gender,
-                   String photo, String dateBirthday) {
+                   String photo, Long dateBirthday) {
 
         this.id = id;
         this.name = name;
@@ -53,7 +53,7 @@ public class Contact {
         return photoPath;
     }
 
-    public String getDateBirthday() {
+    public long getDateBirthday() {
         return dateBirthday;
     }
 
@@ -81,7 +81,7 @@ public class Contact {
         this.gender = gender;
     }
 
-    public void setDateBirthday(String dateBirthday) {
+    public void setDateBirthday(long dateBirthday) {
         this.dateBirthday = dateBirthday;
     }
 

@@ -1,7 +1,11 @@
 package com.nix.dimablyznyuk.student.contacts;
 
+import android.content.Intent;
+import android.content.res.Configuration;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -60,7 +64,8 @@ public class ContactDetailsActivity extends AppCompatActivity {
         tvShowPhoneNumber.setText(contact.getPhoneNumber());
         tvShowGender.setText(contact.getGender() == MainActivity.MALE ? getResources()
                 .getString(R.string.male) : getResources().getString(R.string.female));
-        tvDate.setText(contact.getDateBirthday());
+        tvDate.setText((contact.getDateBirthday() != 0)
+                ? MyDateUtils.fromMilliseconds(contact.getDateBirthday()) : "");
     }
 
     private void showPhoto() {
@@ -84,5 +89,25 @@ public class ContactDetailsActivity extends AppCompatActivity {
     protected void onPause() {
         super.onPause();
         manager.close();
+    }
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+
+        int orientation = this.getResources().getConfiguration().orientation;
+
+        if (newConfig.orientation == Configuration.ORIENTATION_PORTRAIT) {
+            setContentView(R.layout.activity_contact);
+        } else if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            setContentView(R.layout.activity_contact);
+        }
+
+    }
+    public void makeCall(View v){
+
+        String uri = "tel:" + contact.getPhoneNumber().trim() ;
+        Intent intent = new Intent(Intent.ACTION_DIAL);
+        intent.setData(Uri.parse(uri));
+        startActivity(intent);
     }
 }

@@ -33,7 +33,7 @@ public class ContactManager implements Manager {
     }
 
     public int createContact(String name, String address, String phone, int gender,
-                             String photo, String date) {
+                             String photo, long date) {
         contacts.add(new Contact(id++, name, address, phone, gender, photo, date));
         return id;
     }

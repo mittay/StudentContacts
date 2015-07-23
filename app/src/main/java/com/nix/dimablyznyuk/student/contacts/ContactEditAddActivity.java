@@ -3,6 +3,7 @@ package com.nix.dimablyznyuk.student.contacts;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
@@ -111,7 +112,8 @@ public class ContactEditAddActivity extends AppCompatActivity {
             edtPhoneNumber.setText(contact.getPhoneNumber());
             spGender.setSelection(getPosition(contact));
             imagePath = contact.getPhoto();
-            edtEditdateBirthday.setText(contact.getDateBirthday());
+            edtEditdateBirthday.setText((contact.getDateBirthday() != 0)
+                    ? MyDateUtils.fromMilliseconds(contact.getDateBirthday()) : "");
 
             try {
                 ivDetailPhoto.setImageBitmap(new GetImageTask(this).execute(imagePath).get());
@@ -168,7 +170,7 @@ public class ContactEditAddActivity extends AppCompatActivity {
 
             if (contact == null) {
                 int id = manager.createContact(name, address, phoneNumber, gender,
-                        imagePath, date);
+                        imagePath, (date.length() == 0) ? 0 : MyDateUtils.toMilliseconds(date));
                 Toast.makeText(this, R.string.contact_added, Toast.LENGTH_LONG).show();
                 this.setResult(RESULT_OK, new Intent().putExtra(
                         ContactEditAddActivity.EXTRA_CONTACT_ID, id));
@@ -178,7 +180,7 @@ public class ContactEditAddActivity extends AppCompatActivity {
                 contact.setPhoneNumber(phoneNumber);
                 contact.setGender(gender);
                 contact.setPhoto(imagePath);
-                contact.setDateBirthday(date);
+                contact.setDateBirthday((date.length() ==0) ? 0 : MyDateUtils.toMilliseconds(date));
 
                 manager.updateContact(contact);
                 Toast.makeText(this, R.string.contact_changed, Toast.LENGTH_LONG).show();
@@ -276,11 +278,24 @@ public class ContactEditAddActivity extends AppCompatActivity {
             if (data == null) {
                 return;
             }
-            String date = data.getStringExtra(CalendarActivity.EXTRA_DATE);
+            long date = data.getLongExtra(CalendarActivity.EXTRA_DATE, 0);
             Log.d(TAG, " " + date);
-            edtEditdateBirthday.setText(date);
+            edtEditdateBirthday.setText(MyDateUtils.fromMilliseconds(date));
 
         }
+    }
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+
+        int orientation = this.getResources().getConfiguration().orientation;
+
+        if (newConfig.orientation == Configuration.ORIENTATION_PORTRAIT) {
+            setContentView(R.layout.activity_edite_contact);
+        } else if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            setContentView(R.layout.activity_edite_contact);
+        }
+
     }
 
 }

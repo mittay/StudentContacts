@@ -75,8 +75,6 @@ public class MainActivity extends AppCompatActivity {
 
         updateListView();
 
-        lvContacts.setTextFilterEnabled(true);
-
         lvContacts.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             public boolean onItemLongClick(AdapterView<?> parent, View view,
                                            int position, long id) {

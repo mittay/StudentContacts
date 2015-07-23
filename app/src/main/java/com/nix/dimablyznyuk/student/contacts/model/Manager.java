@@ -8,7 +8,7 @@ import java.util.List;
 public interface Manager {
 
     int createContact(String name, String address, String phone, int gender, String imagePath,
-                      String date);
+                      long date);
 
     Contact getContact(int id);
 

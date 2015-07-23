@@ -24,7 +24,7 @@ public class Cell {
         mPaint.setColor(Color.BLACK);
         if (bold) mPaint.setFakeBoldText(true);
 
-        dx = (int) mPaint.measureText(String.valueOf(btnString)) / 2;
+        dx = (int) mPaint.measureText(btnString) / 2;
         dy = (int) (-mPaint.ascent() + mPaint.descent()) / 2;
     }
 

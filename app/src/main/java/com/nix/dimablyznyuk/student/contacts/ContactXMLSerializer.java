@@ -77,7 +77,7 @@ public class ContactXMLSerializer {
             String address = null;
             String phone = null;
             int gender = 0;
-            String date = "";
+            long date = 0;
             String photo = null;
 
 
@@ -109,7 +109,7 @@ public class ContactXMLSerializer {
                         photo = (parser.getText().equals("")) ? null : parser.getText();
                     }
                     if (DATE_TAG.equals(currentTag)) {
-                        date = parser.getText();
+                        date = Long.valueOf(parser.getText());
                         Log.d(TAG, "date" + name);
                     }
 

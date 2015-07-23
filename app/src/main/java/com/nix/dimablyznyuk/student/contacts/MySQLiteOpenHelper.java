@@ -30,7 +30,7 @@ public class MySQLiteOpenHelper extends SQLiteOpenHelper {
             + " text not null, " + COLUMN_GENDER
             + " text not null, " + COLUMN_PHOTO
             + " text, " + COLUMN_DATE
-            + " int " + ")";
+            + " integer" + ")";
 
     public MySQLiteOpenHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);

@@ -33,8 +33,8 @@ public class DayCell extends Cell {
         return this.isCurrentMonth;
     }
 
-    public boolean isInArea(int x, int y) {
-        return mBound.contains(x, y);
-    }
+//    public boolean isInArea(int x, int y) {
+//        return mBound.contains(x, y);
+//    }
 
 }

@@ -1,6 +1,5 @@
 package com.nix.dimablyznyuk.student.contacts;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -10,6 +9,7 @@ import com.nix.dimablyznyuk.student.contacts.CustomCalendarView.OnCellTouchListe
 import com.nix.dimablyznyuk.student.contacts.model.DayCell;
 
 import java.text.ParseException;
+import java.util.Calendar;
 
 /**
  * Created by Dima Blyznyuk on 20.07.15.
@@ -50,9 +50,19 @@ public class CalendarActivity extends AppCompatActivity {
                         .append(" / ")
                         .append(customCalendarView.getYear()).toString();
 
+                long dateMillis = 0;
+                try {
+                    dateMillis = MyDateUtils.toMilliseconds(date);
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+
+                Calendar cal = Calendar.getInstance();
+                cal.setTimeInMillis(dateMillis);
+                cal.get(Calendar.DAY_OF_MONTH);
 
                 Intent intent = new Intent();
-                intent.putExtra(EXTRA_DATE, date);
+                intent.putExtra(EXTRA_DATE, dateMillis);
                 setResult(RESULT_OK, intent);
                 finish();
             }
