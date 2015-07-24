@@ -24,6 +24,8 @@ import com.nix.dimablyznyuk.student.contacts.model.Contact;
 import com.nix.dimablyznyuk.student.contacts.model.Manager;
 import com.nix.dimablyznyuk.student.contacts.model.SQLiteContactManager;
 
+import java.text.ParseException;
+import java.util.Arrays;
 import java.util.List;
 
 import butterknife.Bind;
